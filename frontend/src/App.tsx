@@ -44,14 +44,24 @@ function App() {
     }
   }
 
+  /**
+   * 获取原始的短网址
+   *
+   * @param {string} value 短网址
+   */
   async function getLongUrl(value: string) {
-    const res: AjaxResult<any> = await http.get(`/url?short_url=${value}`);
-    if (res.success) {
-      setShowLongUrlRes(true);
-    } else {
-      message.error(res.msg);
+    try {
+      await get_long_url_form.validateFields();
+      const res: AjaxResult<any> = await http.get(`/url?short_url=${value}`);
+      if (res.success) {
+        setShowLongUrlRes(true);
+      } else {
+        message.error(res.msg);
+      }
+      setLongUrl(res.data ?? "");
+    } catch (err) {
+      console.log("Failed:", err);
     }
-    setLongUrl(res.data ?? "");
   }
 
   return (
